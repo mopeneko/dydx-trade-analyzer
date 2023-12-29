@@ -47,18 +47,17 @@ if uploaded_file is not None and len(d) == 2:
     df = df.where(df["Opened"] >= start_timestamp)
     df = df.where(df["Opened"] <= end_timestamp)
 
-    df["Leveraged PnL"] = df["PnL"] * df["Leverage"]
-    st.write("PnL(sum):", df['Leveraged PnL'].sum(), "USD")
-    st.write("PnL(mean):", df['Leveraged PnL'].mean(), "USD")
+    st.write("PnL(sum):", df['PnL'].sum(), "USD")
+    st.write("PnL(mean):", df['PnL'].mean(), "USD")
 
     df_long = df.where(df["Type"] == "Long")
     df_short = df.where(df["Type"] == "Short")
 
-    st.write("Long PnL(mean):", df_long['Leveraged PnL'].mean(), "USD")
-    st.write("Short PnL(mean):", df_short['Leveraged PnL'].mean(), "USD")
+    st.write("Long PnL(mean):", df_long['PnL'].mean(), "USD")
+    st.write("Short PnL(mean):", df_short['PnL'].mean(), "USD")
 
-    plot = sns.catplot(x="Type", y="Leveraged PnL", data=df, kind="box")
+    plot = sns.catplot(x="Type", y="PnL", data=df, kind="box")
     st.pyplot(plot.fig)
 
-    plot = sns.catplot(x="Market", y="Leveraged PnL", data=df, kind="box", hue="Type")
+    plot = sns.catplot(x="Market", y="PnL", data=df, kind="box", hue="Type")
     st.pyplot(plot.fig)
