@@ -24,8 +24,6 @@ begging_of_month = datetime(today.year, today.month, 1)
 d = st.date_input(
     "Select duration",
     (begging_of_month, today),
-    begging_of_month,
-    today,
 )
 
 timezone = st.selectbox(
