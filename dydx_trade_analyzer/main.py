@@ -46,6 +46,12 @@ if uploaded_file is not None and len(d) == 2:
     df = df.where(df["Opened"] >= start_timestamp)
     df = df.where(df["Opened"] <= end_timestamp)
 
+    st.write("Total trades:", len(df))
+
+    st.write("Win Rate:", df['PnL'].where(df['PnL'] > 0).count() / len(df) * 100, "%")
+
+    st.write("R/R:", df['PnL'].where(df['PnL'] > 0).sum() / abs(df['PnL'].where(df['PnL'] < 0).sum()))
+
     st.write("PnL(sum):", df['PnL'].sum(), "USD")
     st.write("PnL(mean):", df['PnL'].mean(), "USD")
 
