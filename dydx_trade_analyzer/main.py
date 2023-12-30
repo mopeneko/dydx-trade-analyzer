@@ -49,19 +49,25 @@ if uploaded_file is not None and len(d) == 2:
     st.write("Total trades:", len(df))
 
     if len(df) != 0:
-        st.write("Win Rate:", df['PnL'].where(df['PnL'] > 0).count() / len(df) * 100, "%")
+        st.write(
+            "Win Rate:", df["PnL"].where(df["PnL"] > 0).count() / len(df) * 100, "%"
+        )
 
-    if df['PnL'].where(df['PnL'] < 0).sum() != 0:
-        st.write("R/R:", df['PnL'].where(df['PnL'] > 0).sum() / abs(df['PnL'].where(df['PnL'] < 0).sum()))
+    if df["PnL"].where(df["PnL"] < 0).sum() != 0:
+        st.write(
+            "R/R:",
+            df["PnL"].where(df["PnL"] > 0).sum()
+            / abs(df["PnL"].where(df["PnL"] < 0).sum()),
+        )
 
-    st.write("PnL(sum):", df['PnL'].sum(), "USD")
-    st.write("PnL(mean):", df['PnL'].mean(), "USD")
+    st.write("PnL(sum):", df["PnL"].sum(), "USD")
+    st.write("PnL(mean):", df["PnL"].mean(), "USD")
 
     df_long = df.where(df["Type"] == "Long")
     df_short = df.where(df["Type"] == "Short")
 
-    st.write("Long PnL(mean):", df_long['PnL'].mean(), "USD")
-    st.write("Short PnL(mean):", df_short['PnL'].mean(), "USD")
+    st.write("Long PnL(mean):", df_long["PnL"].mean(), "USD")
+    st.write("Short PnL(mean):", df_short["PnL"].mean(), "USD")
 
     plot = sns.catplot(x="Type", y="PnL", data=df, kind="box")
     st.pyplot(plot.fig)
