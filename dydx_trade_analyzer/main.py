@@ -46,8 +46,6 @@ if uploaded_file is not None and len(d) == 2:
     df = df[df["Opened"] >= start_timestamp]
     df = df[df["Opened"] <= end_timestamp]
 
-    st.write(df)
-
     st.write("Total trades:", len(df))
 
     st.write("Win Rate:", df['PnL'].where(df['PnL'] > 0).count() / len(df) * 100, "%")
