@@ -43,8 +43,10 @@ if uploaded_file is not None and len(d) == 2:
     start_timestamp = get_timestamp(d[0], tz)
     end_timestamp = get_timestamp(d[1], tz, end=True)
 
-    df = df.where(df["Opened"] >= start_timestamp)
-    df = df.where(df["Opened"] <= end_timestamp)
+    df = df[df["Opened"] >= start_timestamp]
+    df = df[df["Opened"] <= end_timestamp]
+
+    st.write(df)
 
     st.write("Total trades:", len(df))
 
