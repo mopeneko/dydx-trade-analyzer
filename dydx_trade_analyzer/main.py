@@ -48,9 +48,11 @@ if uploaded_file is not None and len(d) == 2:
 
     st.write("Total trades:", len(df))
 
-    st.write("Win Rate:", df['PnL'].where(df['PnL'] > 0).count() / len(df) * 100, "%")
+    if len(df) != 0:
+        st.write("Win Rate:", df['PnL'].where(df['PnL'] > 0).count() / len(df) * 100, "%")
 
-    st.write("R/R:", df['PnL'].where(df['PnL'] > 0).sum() / abs(df['PnL'].where(df['PnL'] < 0).sum()))
+    if df['PnL'].where(df['PnL'] < 0).sum() != 0:
+        st.write("R/R:", df['PnL'].where(df['PnL'] > 0).sum() / abs(df['PnL'].where(df['PnL'] < 0).sum()))
 
     st.write("PnL(sum):", df['PnL'].sum(), "USD")
     st.write("PnL(mean):", df['PnL'].mean(), "USD")
