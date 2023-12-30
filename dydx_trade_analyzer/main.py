@@ -46,6 +46,8 @@ if uploaded_file is not None and len(d) == 2:
     df = df[df["Opened"] >= start_timestamp]
     df = df[df["Opened"] <= end_timestamp]
 
+    st.dataframe(df, height=300, use_container_width=True)
+
     st.write("Total trades:", len(df))
 
     if len(df) != 0:
