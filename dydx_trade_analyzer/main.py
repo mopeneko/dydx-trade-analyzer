@@ -50,17 +50,34 @@ if uploaded_file is not None and len(d) == 2:
 
     st.write("Total trades:", len(df))
 
-    if len(df) != 0:
-        st.write(
-            "Win Rate:", df["PnL"].where(df["PnL"] > 0).count() / len(df) * 100, "%"
-        )
+    if len(df) == 0:
+        st.stop()
+
+    win_rate = df["PnL"].where(df["PnL"] > 0).count() / len(df) * 100
+    st.write("Win Rate:", win_rate, "%")
 
     if df["PnL"].where(df["PnL"] < 0).sum() != 0:
-        st.write(
-            "R/R:",
+        rr = (
             df["PnL"].where(df["PnL"] > 0).sum()
             / abs(df["PnL"].where(df["PnL"] < 0).sum()),
-        )
+        )[0]
+        st.write("R/R:", rr)
+
+        expected_value = win_rate / 100.0 * rr - (100.0 - win_rate) / 100.0
+
+        # Render x = count, y = PnL, overlay expected value to x graph
+        df["count"] = 1
+        df["cumsum"] = df["count"].cumsum()
+        df["cumsum_pnl"] = df["PnL"].cumsum()
+        df["expected_value"] = df["cumsum"] * expected_value
+
+        fig, ax = plt.subplots()
+        ax.plot(df["cumsum"], df["cumsum_pnl"])
+        ax.plot(df["cumsum"], df["expected_value"])
+        ax.set_xlabel("count")
+        ax.set_ylabel("PnL")
+        ax.grid()
+        st.pyplot(fig)
 
     st.write("PnL(sum):", df["PnL"].sum(), "USD")
     st.write("PnL(mean):", df["PnL"].mean(), "USD")
