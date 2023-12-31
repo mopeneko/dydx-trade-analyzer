@@ -63,22 +63,6 @@ if uploaded_file is not None and len(d) == 2:
         )[0]
         st.write("R/R:", rr)
 
-        expected_value = win_rate / 100.0 * rr - (100.0 - win_rate) / 100.0
-
-        # Render x = count, y = PnL, overlay expected value to x graph
-        df["count"] = 1
-        df["cumsum"] = df["count"].cumsum()
-        df["cumsum_pnl"] = df["PnL"].cumsum()
-        df["expected_value"] = df["cumsum"] * expected_value
-
-        fig, ax = plt.subplots()
-        ax.plot(df["cumsum"], df["cumsum_pnl"])
-        ax.plot(df["cumsum"], df["expected_value"])
-        ax.set_xlabel("count")
-        ax.set_ylabel("PnL")
-        ax.grid()
-        st.pyplot(fig)
-
     st.write("PnL(sum):", df["PnL"].sum(), "USD")
     st.write("PnL(mean):", df["PnL"].mean(), "USD")
 
@@ -87,6 +71,13 @@ if uploaded_file is not None and len(d) == 2:
 
     st.write("Long PnL(mean):", df_long["PnL"].mean(), "USD")
     st.write("Short PnL(mean):", df_short["PnL"].mean(), "USD")
+
+    fig = plt.subplot()
+    df["PnL"].cumsum().plot(ax=fig)
+    fig.set_title("PnL vs trade count")
+    fig.set_xlabel("Trade count")
+    fig.set_ylabel("PnL")
+    st.pyplot(fig.figure)
 
     plot = sns.catplot(x="Type", y="PnL", data=df, kind="box")
     st.pyplot(plot.fig)
